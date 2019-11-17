@@ -34,7 +34,7 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemDepartmentAction() {
-		System.out.println("onMenuItemDepartmentAction");
+		loadView("/gui/DepartmentList.fxml");
 	}
 
 	@FXML
@@ -54,12 +54,12 @@ public class MainViewController implements Initializable {
 
 			Scene mainScene = Main.getMainScene();
 			VBox mainVbox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
-			
+
 			Node mainMenu = mainVbox.getChildren().get(0);
 			mainVbox.getChildren().clear();
 			mainVbox.getChildren().add(mainMenu);
 			mainVbox.getChildren().addAll(newVbox);
-			
+
 		} catch (IOException e) {
 			Alerts.showAlert("IO Exception", "Erro carregando a página.", e.getMessage(), AlertType.ERROR);
 
