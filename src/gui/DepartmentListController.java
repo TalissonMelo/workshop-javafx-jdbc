@@ -1,7 +1,6 @@
 package gui;
 
 import java.net.URL;
-import java.nio.channels.IllegalSelectorException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -33,7 +32,7 @@ public class DepartmentListController implements Initializable {
 
 	@FXML
 	private Button btNew;
-	
+
 	private ObservableList<Department> obsList;
 
 	@FXML
@@ -60,10 +59,10 @@ public class DepartmentListController implements Initializable {
 	}
 
 	public void updateTableView() {
-		if(service == null) {
+		if (service == null) {
 			throw new IllegalStateException("Service null");
 		}
-		
+
 		List<Department> list = service.findAll();
 		obsList = FXCollections.observableArrayList(list);
 		tableViewDepartment.setItems(obsList);
