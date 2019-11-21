@@ -1,11 +1,14 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.sun.xml.internal.ws.org.objectweb.asm.Label;
 
 import db.DBException;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
@@ -23,6 +26,8 @@ public class DepartmentFormController implements Initializable {
 	private Department entity;
 
 	private DepartmentService service;
+
+	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
 	@FXML
 	private TextField txtId;
@@ -47,30 +52,43 @@ public class DepartmentFormController implements Initializable {
 		this.service = service;
 	}
 
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		dataChangeListeners.add(listener);
+	}
+
 	@FXML
 	public void onBtSalveAction(ActionEvent event) {
-		if(entity == null) {
+		if (entity == null) {
 			throw new IllegalArgumentException("Entity was null");
 		}
-		if(service == null) {
+		if (service == null) {
 			throw new IllegalStateException("Service was null");
 		}
-		
+
 		try {
-		entity = getFormData();
-		service.saveOrUpdate(entity);
-		Utils.currentStage(event).close();
-		}catch (DBException e) {
-			Alerts.showAlert("Erro ao salvar Departamento", null , e.getMessage() , AlertType.ERROR);
+			entity = getFormData();
+			service.saveOrUpdate(entity);
+			notifyDataChangeListeners();
+			Utils.currentStage(event).close();
+		} catch (DBException e) {
+			Alerts.showAlert("Erro ao salvar Departamento", null, e.getMessage(), AlertType.ERROR);
 		}
+	}
+
+	private void notifyDataChangeListeners() {
+		
+		for(DataChangeListener listener : dataChangeListeners) {
+			listener.onDataChange();
+		}
+		
 	}
 
 	private Department getFormData() {
 		Department obj = new Department();
-		
+
 		obj.setId(Utils.tryParseToInt(txtId.getText()));
 		obj.setName(txtName.getText());
-		
+
 		return obj;
 	}
 
