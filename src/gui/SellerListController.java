@@ -179,7 +179,7 @@ public class SellerListController implements Initializable, DataChangeListener {
 
 	private void removeEntity(Seller obj) {
 		Optional<ButtonType> result = Alerts.showConfirmation("Confirmação",
-				"Realmente deseja deletar o departamento" + obj.getName() + " ?");
+				"Realmente deseja deletar o Vendedor " + obj.getName() + " ?");
 
 		if (result.get() == ButtonType.OK) {
 			if (service == null) {
